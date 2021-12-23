@@ -2,6 +2,7 @@ import com.soywiz.klock.seconds
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.scene.MaskTransition
 import com.soywiz.korge.scene.Scene
+import com.soywiz.korge.service.process.NativeProcess
 import com.soywiz.korge.ui.UISkin
 import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.ui.uiVerticalFill
@@ -40,6 +41,11 @@ class MainMenu : Scene() {
                 }
                 uiButton(text = "Test5") { }
                 uiButton(text = "Test6") { }
+                uiButton(text = "Quit") {
+                    onClick {
+                        NativeProcess(views).close(0)
+                    }
+                }
             }
         }
     }

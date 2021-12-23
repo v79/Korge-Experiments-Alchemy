@@ -139,7 +139,7 @@ inline fun Container.wrappingText(
     overflow: WrappingText.Overflow = WrappingText.Overflow.NONE,
     maxTextHeight: Double = this.height,
     font: TtfFont,
-    callback: @ViewDslMarker() (WrappingText.() -> Unit) = {},
+    callback: @ViewDslMarker (WrappingText.() -> Unit) = {},
 ) = WrappingText(
     text = text,
     textSize = textSize,

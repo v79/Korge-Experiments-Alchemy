@@ -2,8 +2,10 @@ package tests
 
 import MainMenu
 import com.soywiz.klock.seconds
+import com.soywiz.korev.Key
 import com.soywiz.korge.debug.uiCollapsibleSection
 import com.soywiz.korge.debug.uiEditableValue
+import com.soywiz.korge.input.keys
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.input.onOut
 import com.soywiz.korge.input.onOver
@@ -11,23 +13,41 @@ import com.soywiz.korge.scene.MaskTransition
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.view.*
-import com.soywiz.korge.view.filter.BlurFilter
-import com.soywiz.korge.view.filter.ColorMatrixFilter
-import com.soywiz.korge.view.filter.ShaderFilter
 import com.soywiz.korge.view.filter.TransitionFilter
+import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.font.*
+import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.VfsFile
 import com.soywiz.korio.file.std.localVfs
+import com.soywiz.korio.file.std.resourcesVfs
 import com.soywiz.korma.geom.degrees
-import com.soywiz.korma.geom.radians
-import com.soywiz.korte.Filter
 import com.soywiz.korui.UiContainer
 
 class DirectFontTests : Scene() {
-    override suspend fun Container.sceneInit() {
 
+    lateinit var sword: Bitmap
+    lateinit var overflowAnimation: SpriteAnimation
+    override suspend fun Container.sceneInit() {
+        val swordSpriteMap: Bitmap = resourcesVfs["sword.png"].readBitmap()
+//        val swordanim = SpriteAnimation(spriteMap = swordSpriteMap,
+//        spriteWidth = 32,
+//        spriteHeight = 32,
+//        columns = 1,
+//        rows = 1)
+        sword = swordSpriteMap
+
+        val flaskBmp = resourcesVfs["overflow_flask.png"].readBitmap()
+        overflowAnimation = SpriteAnimation(
+            flaskBmp,
+            spriteWidth = 20,
+            spriteHeight = 18,
+            marginTop = 0,
+            marginLeft = 0,
+            columns = 4
+        )
+        println(overflowAnimation.sprites.size)
     }
 
     override suspend fun Container.sceneMain() {
@@ -37,45 +57,19 @@ class DirectFontTests : Scene() {
         val oxaniumBold = localVfs(fontNamesToFile["Oxanium Bold"]!!.path).readTtfFont()
         val start = 300.0
 
-        /* container {
-             visible = false
-             *//*  val b32 = Bitmap32Context2d(200, 200) {
-                  oxaniumRegular.drawText(
-                      ctx = this,
-                      size = 48.0,
-                      text = "Font.drawText call filled",
-                      x = 200.0,
-                      y = 200.0,
-                      paint = Colors.ORANGE,
-                      fill = true
-                  )
-              }
-              image(b32)*//*
-            val rttbMetrics = oxaniumRegular.measureTextGlyphs(size = 48.0, text = "renderTextToBitmap")
-            println(rttbMetrics.metrics.bounds)
-            val rttb = oxaniumRegular.renderTextToBitmap(
-                size = 48.0,
-                text = "renderTextToBitmap",
-                paint = Colors.PALEVIOLETRED
-            )
-            image(rttb.bmp) {
-                xy(start, start)
-            }
-            val smaller = oxaniumRegular.renderTextToBitmap(24.0, text = "Smaller after rrtb", paint = Colors.LIGHTBLUE)
-            image(smaller.bmp) {
-                xy(start + rttbMetrics.metrics.width, start + smaller.metrics.height)
-            }
 
-        }*/
         container {
             val message = listOf(
                 Message.MsgString("Once upon a time there was a"),
-                Message.MsgItem("handsome", Message.MsgItemType.LEGENDARY),
+                Message.MsgItem("handsome", Message.MsgItemType.LEGENDARY, sword),
                 Message.MsgString("prince, who longed for the love of another man. But his courtiers only found him"),
                 Message.MsgItem("pretty ladies", Message.MsgItemType.COMMON),
-                Message.MsgString(", which didn't interest him at all.")
+                Message.MsgString(", which didn't interest him at all."),
+                Message.MsgString("One spring morning, he set out on his trusty steed"),
+                Message.MsgItem("Tinto", Message.MsgItemType.RARE, sword),
+                Message.MsgString("to search for himself.")
             )
-            text(text = message.map { it.text }.joinToString(" "), textSize = 24.0, font = oxaniumBold) {
+            text(text = message.map { it.text }.joinToString(" "), textSize = 24.0, font = DefaultTtfFont) {
                 xy(100, 270)
             }
 //            roundRect(400.0, 300.0, 0.3, 0.3, fill = Colors.BLACK, stroke = Colors["#d0cec7"], strokeThickness = 4.0) {
@@ -85,14 +79,16 @@ class DirectFontTests : Scene() {
                 textSize = 24.0,
                 color = Colors.BLANCHEDALMOND,
                 maxWidth = 400.0,
-                font = DefaultTtfFont
+                font = DefaultTtfFont,
+                maxHeight = 125.0,
+                overflowSpriteAnimation = overflowAnimation
             ) {
                 xy(100, 300)
             }
 //            }
 
             val message2 = listOf(
-                Message.MsgString("Deprecated Gradle features were used in this build, "),
+                Message.MsgString("Overflowing: Deprecated Gradle features were used in this build, "),
                 Message.MsgItem("making it incompatible", Message.MsgItemType.RARE),
                 Message.MsgString("You can use '--warning-mode all' to show"),
                 Message.MsgItem("the individual deprecation", Message.MsgItemType.COMMON),
@@ -106,49 +102,14 @@ class DirectFontTests : Scene() {
                 textSize = 18.0,
                 color = Colors.BLANCHEDALMOND,
                 maxWidth = 500.0,
-                font = oxaniumBold
+                font = oxaniumBold,
+                maxHeight = 50.0,
+                overflowSpriteAnimation = overflowAnimation
             ) {
                 xy(550, 300)
             }
+            println("lines: ${p.lineCount}, overflow: ${p.overflowing}, height: ${p.height}, maxHeight: 50.0, pages; ${p.pageCount}")
         }
-
-        /*container {
-            visible = false
-            val text1 = "Thank you, adventurer. Please take this "
-            val item = "[ring of greater power]"
-            val text2 = " and "
-            val item2 = "[23 gold]"
-            val text3 = " for your troubles."
-            val textSize = 24.0
-
-            var xStart = start
-            var yStart = start + 50
-            val textList = listOf(text1, item, text2, item2, text3)
-            val endOfLine = 700.0
-
-            for (thing in textList) {
-                var isItem = thing.startsWith("[")
-                val thingMetrics = oxaniumRegular.measureTextGlyphs(size = textSize, text = thing)
-                val thingBmp = oxaniumRegular.renderTextToBitmap(
-                    size = textSize,
-                    text = thing,
-                    paint = if (isItem) Colors.PINK else Colors.WHITE
-                ).bmp
-                if (thingMetrics.metrics.width + xStart > endOfLine) {
-                    xStart = start
-                    yStart += 40.0
-                }
-                image(thingBmp) {
-                    xy(xStart, yStart)
-                    onClick {
-                        if (isItem) {
-                            println("Clicked on item: $thing")
-                        }
-                    }
-                }
-                xStart += thingMetrics.metrics.width
-            }
-        }*/
 
         uiButton(text = "Return to main menu") {
             xy(800.0, 600.0)
@@ -173,7 +134,7 @@ sealed class Message(val text: String) {
         }
     }
 
-    class MsgItem(text: String, val type: MsgItemType) : Message(text) {
+    class MsgItem(text: String, val type: MsgItemType, val sprite: Bitmap? = null) : Message(text) {
         override fun toString(): String {
             return "[$text ($type)]"
         }
@@ -192,9 +153,11 @@ fun Container.paragraph(
     color: RGBA = Colors.WHITE,
     font: Font = DefaultTtfFont,
     maxWidth: Double = 100.0,
+    maxHeight: Double = 0.0,
+    overflowSpriteAnimation: SpriteAnimation,
     block: @ViewDslMarker Paragraph.() -> Unit = {}
 ): Paragraph = Paragraph(
-    para, textSize, color, font, maxWidth
+    para, textSize, color, font, maxWidth, maxHeight, overflowSpriteAnimation
 ).addTo(this, block)
 
 class Paragraph(
@@ -202,22 +165,51 @@ class Paragraph(
     textSize: Double = 24.0,
     color: RGBA = Colors.WHITE,
     font: Font = DefaultTtfFont,
-    maxWidth: Double = 100.0
+    maxWidth: Double = 100.0,
+    maxHeight: Double = 0.0,
+    overflowSpriteAnimation: SpriteAnimation
 ) : Container(), ViewLeaf, IText {
 
     override var text: String = (messageItems.map { it.text }).joinToString("")
     var lineCount: Int = 1; private set
+    var overflowing: Boolean = false; private set
 
-    var currentX: Double = 0.0
-    var currentY: Double = 0.0
+    private var currentX: Double = 0.0
+    private var currentY: Double = 0.0
 
     private val spaceWidth = font.getGlyphMetrics(textSize, ' '.code).xadvance
 
-    init {
-        val tokens = tokenise()
+    val pages = mutableListOf<Container>()
+    var currentPage = 0
 
+    val pageCount: Int
+        get() = pages.size
+
+    init {
+        var pageContainer = Container()
+        pageContainer.name = "Page 0"
+        val overflowContainer = Container()
+        overflowContainer.name = "Overflow"
+//        pages.add(pageContainer)
+        val tokens = tokenise()
+        var pageCounter = 0
         for (word in tokens) {
             val wordMetrics = font.measureTextGlyphs(textSize, word.text)
+            if (wordMetrics.metrics.width + currentX > maxWidth) {
+                lineCount++
+                currentX = 0.0
+                currentY += wordMetrics.fmetrics.lineHeight
+            }
+            if (maxHeight > 0.0 && (currentY + wordMetrics.metrics.height) >= maxHeight) {
+                overflowing = true
+                pages.add(pageContainer)
+                pageCounter++
+                pageContainer = Container() // new container
+                pageContainer.name = "Page $pageCounter"
+                // reset positions
+                currentX = 0.0
+                currentY = 0.0
+            }
             val wordBmp = font.renderTextToBitmap(
                 size = textSize,
                 text = word.text,
@@ -226,12 +218,13 @@ class Paragraph(
                 } else color,
                 drawBorder = true
             ).bmp
-            if (wordMetrics.metrics.width + currentX > maxWidth) {
-                lineCount++
-                currentX = 0.0
-                currentY += wordMetrics.fmetrics.lineHeight
+            if (word is Message.MsgItem && word.sprite != null) {
+                pageContainer.sprite(word.sprite) {
+                    xy(currentX, currentY)
+                }
+                currentX += word.sprite.width + 8.0
             }
-            image(wordBmp) {
+            pageContainer.image(wordBmp) {
                 xy(currentX, currentY)
                 if (word is Message.MsgItem) {
                     onOver {
@@ -242,7 +235,51 @@ class Paragraph(
                     }
                 }
             }
-            currentX += if(word is Message.MsgString ) {wordMetrics.metrics.width + (spaceWidth * 1.5) } else { wordMetrics.metrics.width + spaceWidth } // seem to need a bigger spacing for clarity
+            currentX += if (word is Message.MsgString) {
+                wordMetrics.metrics.width + (spaceWidth * 1.5)
+            } else {
+                wordMetrics.metrics.width + spaceWidth
+            } // seem to need a bigger spacing for clarity
+        }
+        pages.add(pageContainer)
+
+        pages.forEach { it.visible = false } // hide them all
+        this.addChildren(pages)
+        this.addChild(overflowContainer)
+
+        pages[0].visible = true
+        if (overflowing) {
+            overflowContainer.sprite(overflowSpriteAnimation) {
+                playAnimationLooped(spriteDisplayTime = 0.5.seconds)
+//            overflowContainer.image(font.renderTextToBitmap(textSize, "/", Colors.WHITE).bmp) {
+                xy(maxWidth - textSize, maxHeight - textSize)
+                onClick {
+                    nextPage(overflowContainer)
+                }
+                keys {
+                    up(Key.SPACE) {
+                        nextPage(overflowContainer)
+                    }
+                }
+            }
+        }
+
+        for (page in pages) {
+            println(page)
+        }
+    }
+
+    /**
+     * Show the next page
+     */
+    private fun nextPage(overflowContainer: Container) {
+        if (currentPage < pageCount - 1) {
+            pages[currentPage].visible = false
+            currentPage++
+            pages[currentPage].visible = true
+        }
+        if (currentPage >= (pageCount - 1)) {
+            overflowContainer.visible = false
         }
     }
 
@@ -269,4 +306,7 @@ class Paragraph(
         }
         super.buildDebugComponent(views, container)
     }
+
 }
+
+typealias ParagraphPage = Bitmap
