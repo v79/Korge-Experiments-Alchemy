@@ -18,5 +18,6 @@ object MyModule : Module() {
         mapPrototype { CustomTestRenderer() }
         mapPrototype { DirectFontTests() }
         mapPrototype { VectorGraphicsTests() }
+        mapPrototype { FollowMousePointerTest() }
     }
 }

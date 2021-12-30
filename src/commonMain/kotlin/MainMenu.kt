@@ -39,7 +39,9 @@ class MainMenu : Scene() {
                 uiButton(text = "Vector Graphics") {
                     onClick { goToScene("vectorGraphics") }
                 }
-                uiButton(text = "Test6") { }
+                uiButton(text = "Draw follows mouse") {
+                    onClick { goToScene("followMouseTest") }
+                }
                 uiButton(text = "Quit") {
                     onClick {
                         NativeProcess(views).close(0)
@@ -93,6 +95,16 @@ class MainMenu : Scene() {
             }
             "vectorGraphics" -> {
                 sceneContainer.changeTo<VectorGraphicsTests>(
+                    transition = MaskTransition(
+                        transition = TransitionFilter.Transition.VERTICAL,
+                        smooth = true,
+                        filtering = true
+                    ),
+                    time = 1.seconds
+                )
+            }
+            "followMouseTest" -> {
+                sceneContainer.changeTo<FollowMousePointerTest>(
                     transition = MaskTransition(
                         transition = TransitionFilter.Transition.VERTICAL,
                         smooth = true,
