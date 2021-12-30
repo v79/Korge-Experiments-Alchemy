@@ -10,10 +10,7 @@ import com.soywiz.korge.view.Container
 import com.soywiz.korge.view.centerOnStage
 import com.soywiz.korge.view.container
 import com.soywiz.korge.view.filter.TransitionFilter
-import tests.CustomTestRenderer
-import tests.DirectFontTests
-import tests.FontTests
-import tests.Test1
+import tests.*
 
 class MainMenu : Scene() {
 
@@ -39,7 +36,9 @@ class MainMenu : Scene() {
                 uiButton(text = "Direct Font Render") {
                     onClick { goToScene("directFont")}
                 }
-                uiButton(text = "Test5") { }
+                uiButton(text = "Vector Graphics") {
+                    onClick { goToScene("vectorGraphics") }
+                }
                 uiButton(text = "Test6") { }
                 uiButton(text = "Quit") {
                     onClick {
@@ -84,6 +83,16 @@ class MainMenu : Scene() {
             }
             "directFont" -> {
                 sceneContainer.changeTo<DirectFontTests>(
+                    transition = MaskTransition(
+                        transition = TransitionFilter.Transition.VERTICAL,
+                        smooth = true,
+                        filtering = true
+                    ),
+                    time = 1.seconds
+                )
+            }
+            "vectorGraphics" -> {
+                sceneContainer.changeTo<VectorGraphicsTests>(
                     transition = MaskTransition(
                         transition = TransitionFilter.Transition.VERTICAL,
                         smooth = true,
