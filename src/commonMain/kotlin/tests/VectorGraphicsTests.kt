@@ -16,7 +16,10 @@ import com.soywiz.korim.vector.Drawable
 import com.soywiz.korim.vector.GraphicsPath
 import com.soywiz.korim.vector.StrokeInfo
 import com.soywiz.korma.geom.Point
+import com.soywiz.korma.geom.degrees
+import com.soywiz.korma.geom.plus
 import com.soywiz.korma.geom.vector.LineCap
+import com.soywiz.korma.geom.vector.circle
 
 inline fun Container.outlineSquare(x: Double, y: Double, size: Double, paint: Paint, strokeThickness: Double): Graphics {
     return graphics {
@@ -36,32 +39,58 @@ class VectorGraphicsTests : Scene() {
     override suspend fun Container.sceneInit() {
        newSquare.apply {
            beginStroke(Colors.BLUE, StrokeInfo(thickness = 2.0))
-           moveTo(400.0,400.0)
-           lineTo(500.0, 400.0)
-           lineTo(500.0, 500.0)
-           lineTo(400.0,500.0)
-           lineTo(400.0,400.0)
+           moveTo(200.0,200.0)
+           lineTo(300.0, 200.0)
+           lineTo(300.0, 300.0)
+           lineTo(200.0,300.0)
+           lineTo(200.0,200.0)
            endStroke()
+           name = "new square graphics object"
        }
     }
 
     override suspend fun Container.sceneMain() {
 
-        val newSquareBmp = newSquare.renderToBitmap(views)
         container {
+            name = "my container"
+//            val newSquareBmp = newSquare.renderToBitmap(views)
+
+            addChild(newSquare) // does NOT add twice
+            // completely redraw the shape, as a circle this time.
+            newSquare.lock {
+                newSquare.clear()
+                newSquare.beginFill(Colors.YELLOW)
+                newSquare.circle(200.0, 200.0, 50.0)
+                newSquare.endFill()
+            }
+//            val cicleBmp = newSquare.renderToBitmap(views)
 
             solidRect(300.0, 300.0) {
                 xy(50.0, 50.0)
 
-                addChild(newSquare)
-                sprite(newSquareBmp) {
+
+
+
+                addChild(newSquare) // appears at the drawn coordinates
+
+
+                newSquare.addUpdater {
+//                    rotation +=1.degrees
+                    x++
+                    if(x > 500) x = 100.0
+                }
+
+               /* sprite(newSquareBmp) {
+                    name = "newSquareBmp sprite at 600,600 isn't visible"
                     xy(600,600)
                 }
                 image(newSquareBmp) {
+                    name = "newSquareBmp image at 400,400 isn't visible"
                     xy(400,400)
-                }
+                }*/
 
                 val square: Graphics = graphics {
+                    name = "Green square"
                     beginStroke(
                         paint = Colors.GREEN,
                         info = StrokeInfo(thickness = 3.0, startCap = LineCap.ROUND, endCap = LineCap.ROUND)
@@ -82,7 +111,7 @@ class VectorGraphicsTests : Scene() {
                 }
             }
 
-            solidRect(200.0, 200.0) {
+            /*solidRect(200.0, 200.0) {
                 xy(250.0, 250.0)
                 val outlineSquare = outlineSquare(x = 255.0, y=255.0, 32.0, paint = Colors.RED, strokeThickness = 4.0)
 
@@ -99,7 +128,7 @@ class VectorGraphicsTests : Scene() {
                     solidRect(50.0, 50.0, color = Colors.PURPLE) {
                         xy(25,25)
                 }
-            }
+            }*/
 
             uiButton(text = "Return to main menu") {
                 xy(800.0, 600.0)
