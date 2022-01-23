@@ -19,5 +19,7 @@ object MyModule : Module() {
         mapPrototype { DirectFontTests() }
         mapPrototype { VectorGraphicsTests() }
         mapPrototype { FollowMousePointerTest() }
+        mapPrototype { TypingTextTest() }
+        mapPrototype { DraggingTest() }
     }
 }

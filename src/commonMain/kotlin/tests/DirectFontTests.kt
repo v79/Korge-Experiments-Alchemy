@@ -1,6 +1,7 @@
 package tests
 
 import MainMenu
+import com.soywiz.klock.TimeSpan
 import com.soywiz.klock.seconds
 import com.soywiz.korev.Key
 import com.soywiz.korge.debug.uiCollapsibleSection
@@ -11,6 +12,8 @@ import com.soywiz.korge.input.onOut
 import com.soywiz.korge.input.onOver
 import com.soywiz.korge.scene.MaskTransition
 import com.soywiz.korge.scene.Scene
+import com.soywiz.korge.time.delay
+import com.soywiz.korge.time.delayFrame
 import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.filter.TransitionFilter

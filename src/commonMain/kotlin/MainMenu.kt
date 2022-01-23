@@ -42,6 +42,12 @@ class MainMenu : Scene() {
                 uiButton(text = "Draw follows mouse") {
                     onClick { goToScene("followMouseTest") }
                 }
+                uiButton(text = "Typing Text") {
+                    onClick { goToScene("typingText") }
+                }
+                uiButton(text = "Dragging Tests") {
+                    onClick { goToScene("draggingTest") }
+                }
                 uiButton(text = "Quit") {
                     onClick {
                         NativeProcess(views).close(0)
@@ -105,6 +111,26 @@ class MainMenu : Scene() {
             }
             "followMouseTest" -> {
                 sceneContainer.changeTo<FollowMousePointerTest>(
+                    transition = MaskTransition(
+                        transition = TransitionFilter.Transition.VERTICAL,
+                        smooth = true,
+                        filtering = true
+                    ),
+                    time = 1.seconds
+                )
+            }
+            "typingText" -> {
+                sceneContainer.changeTo<TypingTextTest>(
+                    transition = MaskTransition(
+                        transition = TransitionFilter.Transition.VERTICAL,
+                        smooth = true,
+                        filtering = true
+                    ),
+                    time = 1.seconds
+                )
+            }
+            "draggingTest" -> {
+                sceneContainer.changeTo<DraggingTest>(
                     transition = MaskTransition(
                         transition = TransitionFilter.Transition.VERTICAL,
                         smooth = true,

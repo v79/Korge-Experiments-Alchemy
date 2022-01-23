@@ -67,13 +67,9 @@ class VectorGraphicsTests : Scene() {
 
             solidRect(300.0, 300.0) {
                 xy(50.0, 50.0)
-
-
-
+                println("solidRect collides with its container?"  + collidesWith(this@container))
 
                 addChild(newSquare) // appears at the drawn coordinates
-
-
                 newSquare.addUpdater {
 //                    rotation +=1.degrees
                     x++
