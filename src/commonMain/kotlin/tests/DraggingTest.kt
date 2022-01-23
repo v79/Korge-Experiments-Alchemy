@@ -2,7 +2,10 @@ package tests
 
 import MainMenu
 import com.soywiz.klock.seconds
+import com.soywiz.korev.MouseEvent
 import com.soywiz.korge.animate.animate
+import com.soywiz.korge.baseview.BaseView
+import com.soywiz.korge.component.MouseComponent
 import com.soywiz.korge.input.*
 import com.soywiz.korge.input.draggable
 import com.soywiz.korge.scene.MaskTransition
@@ -13,6 +16,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korge.view.filter.TransitionFilter
 import com.soywiz.korim.color.Colors
 import com.soywiz.korio.async.launchImmediately
+import com.soywiz.korma.geom.Point
 
 class DraggingTest : Scene() {
 
