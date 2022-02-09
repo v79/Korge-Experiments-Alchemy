@@ -1,12 +1,14 @@
 plugins {
 	id("com.soywiz.korge")
 	kotlin("kapt") version "1.5.21"
-	kotlin("plugin.serialization") version "1.5.31"
+//	kotlin("plugin.serialization") version "1.5.31"
 }
 
 korge {
 	targetJvm()
     targetJs()
+	targetDesktop()
+	serializationJson()
 }
 
 repositories {
