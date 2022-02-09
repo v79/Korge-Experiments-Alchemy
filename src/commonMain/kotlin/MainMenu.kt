@@ -22,7 +22,7 @@ class MainMenu : Scene() {
 
 	override suspend fun Container.sceneMain() {
 		container {
-			uiVerticalFill {
+			uiVerticalFill(height = 600.0) {
 				centerOnStage()
 				uiButton(text = "Wrapping Text") {
 					onClick { goToScene("test1") }
@@ -50,6 +50,9 @@ class MainMenu : Scene() {
 				}
 				uiButton(text = "Backing Data Tests") {
 					onClick { goToScene("backingTest") }
+				}
+				uiButton(text = "Bus Tests") {
+					onClick { goToScene("busTest") }
 				}
 				uiButton(text = "Quit") {
 					onClick {
@@ -144,6 +147,16 @@ class MainMenu : Scene() {
 			}
 			"backingTest" -> {
 				sceneContainer.changeTo<BackingDataTest>(
+					transition = MaskTransition(
+						transition = TransitionFilter.Transition.VERTICAL,
+						smooth = true,
+						filtering = true
+					),
+					time = 1.seconds
+				)
+			}
+			"busTest" -> {
+				sceneContainer.changeTo<BusTest>(
 					transition = MaskTransition(
 						transition = TransitionFilter.Transition.VERTICAL,
 						smooth = true,

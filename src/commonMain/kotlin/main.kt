@@ -22,5 +22,6 @@ object MyModule : Module() {
         mapPrototype { TypingTextTest() }
         mapPrototype { DraggingTest() }
         mapPrototype { BackingDataTest() }
+        mapPrototype { BusTest() }
     }
 }
