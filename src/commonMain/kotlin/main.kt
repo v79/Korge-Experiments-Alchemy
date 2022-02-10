@@ -1,4 +1,6 @@
 import com.soywiz.korge.Korge
+import com.soywiz.korge.bus.Bus
+import com.soywiz.korge.bus.GlobalBus
 import com.soywiz.korge.scene.Module
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korinject.AsyncInjector
@@ -12,6 +14,10 @@ object MyModule : Module() {
     override val mainScene: KClass<out Scene> = MainMenu::class
 
     override suspend fun AsyncInjector.configure() {
+
+        mapSingleton { GlobalBus() }
+        mapPrototype { Bus(get()) }
+
         mapPrototype { MainMenu() }
         mapPrototype { Test1() }
         mapPrototype { FontTests() }
@@ -22,6 +28,7 @@ object MyModule : Module() {
         mapPrototype { TypingTextTest() }
         mapPrototype { DraggingTest() }
         mapPrototype { BackingDataTest() }
-        mapPrototype { BusTest() }
+        mapPrototype { BusTest(get()) }
+        mapPrototype { BusTestPage2(get()) }
     }
 }
