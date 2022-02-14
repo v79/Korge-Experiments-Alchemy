@@ -27,6 +27,7 @@ import com.soywiz.korio.file.std.rootLocalVfs
 import com.soywiz.korio.lang.forEachCodePoint
 import com.soywiz.korio.util.niceStr
 import com.soywiz.korma.geom.*
+import goHomeButton
 
 class FontTests : Scene() {
 
@@ -90,19 +91,8 @@ class FontTests : Scene() {
                 xy(50, 250)
 
             }
-            uiButton(text = "Return to main menu") {
-                xy(sceneContainer.width - 150, sceneContainer.height - 50)
-                onClick {
-                    sceneContainer.changeTo<MainMenu>(
-                        transition = MaskTransition(
-                            transition = TransitionFilter.Transition.SWEEP,
-                            smooth = true,
-                            filtering = true
-                        ),
-                        time = 0.5.seconds
-                    )
-                }
-            }
+
+            goHomeButton(sceneContainer)
         }
     }
 }

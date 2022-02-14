@@ -21,6 +21,7 @@ import com.soywiz.korim.text.TextRendererActions
 import com.soywiz.korio.file.VfsFile
 import com.soywiz.korio.file.std.localVfs
 import com.soywiz.korui.UiContainer
+import goHomeButton
 
 // TODO: I need to know if the text overflew its container's height, as defined by the wrapHeight property
 class Test1 : Scene() {
@@ -111,19 +112,7 @@ class Test1 : Scene() {
                 }
             }
 
-            uiButton(text = "Return to main menu") {
-                xy(sceneContainer.width - 150, sceneContainer.height - 50)
-                onClick {
-                    sceneContainer.changeTo<MainMenu>(
-                        transition = MaskTransition(
-                            transition = TransitionFilter.Transition.SWEEP,
-                            smooth = true,
-                            filtering = true
-                        ),
-                        time = 0.5.seconds
-                    )
-                }
-            }
+            goHomeButton(sceneContainer)
         }
     }
 }

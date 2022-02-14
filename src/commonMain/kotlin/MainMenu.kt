@@ -16,6 +16,12 @@ class MainMenu : Scene() {
 
 	lateinit var mainMenuSkin: UISkin
 
+	val transition = MaskTransition(
+		transition = TransitionFilter.Transition.VERTICAL,
+		smooth = true,
+		filtering = true
+	)
+
 	override suspend fun Container.sceneInit() {
 		mainMenuSkin = UISkin { }
 	}
@@ -54,6 +60,9 @@ class MainMenu : Scene() {
 				uiButton(text = "Bus Tests") {
 					onClick { goToScene("busTest") }
 				}
+				uiButton(text = "Layout Tests") {
+					onClick { goToScene("layoutTest") }
+				}
 				uiButton(text = "Quit") {
 					onClick {
 						NativeProcess(views).close(0)
@@ -67,101 +76,67 @@ class MainMenu : Scene() {
 		when (nextScene) {
 			"test1" -> {
 				sceneContainer.changeTo<Test1>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"fonts" -> {
 				sceneContainer.changeTo<FontTests>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"customRenderer" -> {
 				sceneContainer.changeTo<CustomTestRenderer>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"directFont" -> {
 				sceneContainer.changeTo<DirectFontTests>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"vectorGraphics" -> {
 				sceneContainer.changeTo<VectorGraphicsTests>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"followMouseTest" -> {
 				sceneContainer.changeTo<FollowMousePointerTest>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"typingText" -> {
 				sceneContainer.changeTo<TypingTextTest>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"draggingTest" -> {
 				sceneContainer.changeTo<DraggingTest>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"backingTest" -> {
 				sceneContainer.changeTo<BackingDataTest>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
 					time = 1.seconds
 				)
 			}
 			"busTest" -> {
 				sceneContainer.changeTo<BusTest>(
-					transition = MaskTransition(
-						transition = TransitionFilter.Transition.VERTICAL,
-						smooth = true,
-						filtering = true
-					),
+					transition = transition,
+					time = 1.seconds
+				)
+			}
+			"layoutTest" -> {
+				sceneContainer.changeTo<LayoutTest>(
+					transition = transition,
 					time = 1.seconds
 				)
 			}
