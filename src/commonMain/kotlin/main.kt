@@ -35,7 +35,7 @@ object MyModule : Module() {
         mapPrototype { DraggingTest() }
         mapPrototype { BackingDataTest() }
         mapPrototype { BusTest(get()) }
-        mapPrototype { LayoutTest() }
+        mapPrototype { LayoutTest(get()) }
     }
 }
 
