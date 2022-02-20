@@ -15,10 +15,7 @@ import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.filter.TransitionFilter
-import com.soywiz.korim.bitmap.Bitmap
-import com.soywiz.korim.bitmap.Bitmaps
-import com.soywiz.korim.bitmap.BmpSlice
-import com.soywiz.korim.bitmap.slice
+import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.font.*

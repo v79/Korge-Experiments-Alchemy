@@ -7,7 +7,6 @@ import com.soywiz.korim.color.Colors
 import com.soywiz.korge.bus.SyncBus
 import com.soywiz.korge.ui.uiCheckBox
 import goHomeButton
-import kotlin.math.sign
 
 
 class LayoutTest(private val bus: SyncBus) : Scene() {
@@ -192,43 +191,76 @@ class FlowContainer(
 				0.0
 			}
 			FlowAlignment.Center -> {
-				var sumWidth = 0.0
-				var row = mutableListOf<View>()
-				var rowCount = 0
-				for (child in children) {
-					sumWidth += child.width
-					println("\tsumWidth: $sumWidth")
-					if (sumWidth >= maxWidth) {
-						println("add $row to rowsOrColumns, reset")
-						rowsOrColumns += row
-						row = mutableListOf()
-						rowCount++
-						println("add $child to row $rowCount")
-						row += child
-						sumWidth = child.width
-					} else {
-						println("add $child to row $rowCount")
-						row += child
+				when (configuration.direction) {
+					FlowLayout.Horizontal -> {
+						var sumWidth = 0.0
+						var row = mutableListOf<View>()
+						var rowCount = 0
+						for (child in children) {
+							sumWidth += child.width
+							println("\tsumWidth: $sumWidth")
+							if (sumWidth >= maxWidth) {
+								println("add $row to rowsOrColumns, reset")
+								rowsOrColumns += row
+								row = mutableListOf()
+								rowCount++
+								println("add $child to row $rowCount")
+								row += child
+								sumWidth = child.width
+							} else {
+								println("add $child to row $rowCount")
+								row += child
 //						sumWidth += child.width
+							}
+						}
+						// and add the final row
+						rowsOrColumns += row
+						println("sumWidth: $sumWidth -> Centered over ${rowsOrColumns.size + 1} rows")
+
+					}
+					FlowLayout.Vertical -> {
+						var sumHeight = 0.0
+						var column = mutableListOf<View>()
+						var columnCount = 0
+						for (child in children) {
+							sumHeight += child.height
+							println("\tsumHeight: $sumHeight")
+							if (sumHeight >= maxHeight) {
+								println("add $column to rowsOrColumns, reset")
+								rowsOrColumns += column
+								column = mutableListOf()
+								columnCount++
+								println("add $child to column $columnCount")
+								column += child
+								sumHeight = child.height
+							} else {
+								println("add $child to column $columnCount")
+								column += child
+							}
+						}
+						// and add the final column
+						rowsOrColumns += column
+						println("sumHeight: $sumHeight -> Centered over ${rowsOrColumns.size + 1} columns")
 					}
 				}
-				// and add the final row
-				rowsOrColumns += row
-				println("sumWidth: $sumWidth -> Centered over ${rowsOrColumns.size + 1} rows")
 
-				val startX = calculateRowStart(rowsOrColumns[0])
+				val startX = calculateRowXStart(rowsOrColumns[0])
 				println("first startX = $startX")
 
-
 				println("---------------- CENTER -------------")
-				println("Total rows: ${rowsOrColumns.size}")
+				var name = if (configuration.direction == FlowLayout.Vertical) {
+					"column"
+				} else {
+					"row"
+				}
+				println("Total ${name}s: ${rowsOrColumns.size}")
 				rowsOrColumns.forEachIndexed { index, row ->
-					println("Row: $index contains (${row.size}):")
+					println("$name: $index contains (${row.size}):")
 					row.forEachIndexed { rIndex, item ->
 						println("\tItem $rIndex = $item")
 					}
-					val tmpRowStart = calculateRowStart(row)
-					println("\tSTART: $tmpRowStart")
+//					val tmpRowStart = calculateRowXStart(row)
+//					println("\tSTART: $tmpRowStart")
 				}
 				println("---------------- end CENTER ----------")
 
@@ -243,8 +275,9 @@ class FlowContainer(
 
 		var stopRendering = false // if we are cropping we may need to stop showing the items
 		var xPos = xStart
-		var yPos = 0.0
+		var yPos = if(configuration.direction == FlowLayout.Vertical && rowsOrColumns.size > 0) { calculateColumnYStart(rowsOrColumns[0]) } else { 0.0 }
 		var rowCounter = 0 // for centering
+		var columnCounter = 0 // for centering
 		forEachChild {
 			it.visible = true // reset visibility
 			when (configuration.alignment) {
@@ -278,13 +311,13 @@ class FlowContainer(
 					when (configuration.direction) {
 						FlowLayout.Horizontal -> {
 							println("number of rows: ${rowsOrColumns.size}, at row: $rowCounter")
-							if(xPos + it.width >= maxWidth) {
+							if (xPos + it.width >= maxWidth) {
 								println("Next row at $it for row $rowCounter?")
 								rowCounter++
-								yPos += it.width + minPadding
-								if(rowCounter <= rowsOrColumns.size) {
+								yPos += it.height + minPadding
+								if (rowCounter < rowsOrColumns.size) {
 									println("Calculate the start for row $rowCounter")
-									xPos = calculateRowStart(rowsOrColumns[rowCounter])
+									xPos = calculateRowXStart(rowsOrColumns[rowCounter])
 								} else {
 									println("Error - we've got a rowCounter which exceeds the number of rows ")
 								}
@@ -292,7 +325,19 @@ class FlowContainer(
 
 						}
 						FlowLayout.Vertical -> {
-
+							println("number of columns: ${rowsOrColumns.size}, at column: $columnCounter")
+							if (yPos + it.height >= maxHeight) {
+								println("Next column at $it for row $columnCounter?")
+								println("xPos was $xPos, now ${xPos + it.width + minPadding}")
+								columnCounter++
+								xPos += it.width + minPadding
+								if (columnCounter < rowsOrColumns.size) {
+									println("Calculate the start for column $columnCounter")
+									yPos = calculateColumnYStart(rowsOrColumns[columnCounter])
+								} else {
+									println("Error - we've got a columnCounter which exceeds the number of columns ")
+								}
+							}
 						}
 					}
 
@@ -450,13 +495,22 @@ class FlowContainer(
 			}*/
 	}
 
-	private fun calculateRowStart(row: List<View>): Double {
+	private fun calculateRowXStart(row: List<View>): Double {
 		println("\t\tCalculating xStart for row $row sized ${row.size}")
 		val rowWidth = row.sumOf { it.width } + (minPadding * row.size)
 		println("\t\trowWidth: $rowWidth")
 		println("\t\titemCount: ${row.size}")
 		println("\t\tnewXStart: ${(maxWidth - rowWidth) / 2.0}")
 		return (maxWidth - rowWidth) / 2.0
+	}
+
+	private fun calculateColumnYStart(column: List<View>): Double {
+		println("\t\tCalculating yStart for column $column sized ${column.size}")
+		val columnHeight = column.sumOf { it.height } + (minPadding * column.size)
+		println("\t\tcolumnWidth: $columnHeight")
+		println("\t\titemCount: ${column.size}")
+		println("\t\tnewYStart: ${(maxHeight - columnHeight) / 2.0}")
+		return (maxHeight - columnHeight) / 2.0
 	}
 }
 
