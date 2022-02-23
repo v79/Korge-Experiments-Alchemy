@@ -124,6 +124,30 @@ class LayoutTest(private val bus: SyncBus) : Scene() {
 				}
 			}
 
+			text(text = "Mixed sizes, nested flows", textSize = 14.0, color = Colors.WHITE) {
+				xy(650.0, 25.0)
+			}
+			solidRect(300.0, 300.0, color = Colors.LIGHTGRAY) {
+				xy(650.0, 50.0)
+			}
+			flowContainer(maxWidth = 300.0, maxHeight = 300.0, minPadding = 10.0, configuration = FlowContainer.FlowConfiguration(FlowContainer.FlowLayout.Horizontal, false, FlowContainer.FlowAlignment.Center)) {
+				xy(650.0, 50.0)
+				fixedSizeContainer(75.0, 75.0) {
+					flowContainer(75.0, 75.0, 5.0,FlowContainer.FlowAlignment.Center,false,FlowContainer.FlowLayout.Horizontal) {
+						solidRect(20.0,75.0, color = Colors.GREEN)
+						solidRect(20.0,75.0, color = Colors.GREEN)
+						solidRect(20.0,75.0, color = Colors.GREEN)
+					}
+
+				}
+				fixedSizeContainer(25.0, 25.0) {
+					solidRect(25.0,25.0, color = Colors.BLUE)
+				}
+				fixedSizeContainer(75.0, 75.0) {
+					solidRect(75.0,75.0, color = Colors.RED)
+				}
+			}
+
 			goHomeButton(sceneContainer)
 		}
 	}
@@ -373,7 +397,7 @@ class FlowContainer(
 				it.visible = false
 			} else {
 				println("$it at $xPos,$yPos")
-				it.xy((xPos + minPadding), (yPos + minPadding))
+				it.xy((xPos ), (yPos ))
 			}
 
 			// increment to move on to the next item
