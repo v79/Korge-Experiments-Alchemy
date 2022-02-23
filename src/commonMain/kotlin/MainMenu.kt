@@ -23,7 +23,10 @@ class MainMenu : Scene() {
 	)
 
 	override suspend fun Container.sceneInit() {
-		mainMenuSkin = UISkin { }
+		val timeToInit = measureTimeMillis {
+			mainMenuSkin = UISkin { }
+			println("Init scene")
+		}
 	}
 
 	override suspend fun Container.sceneMain() {

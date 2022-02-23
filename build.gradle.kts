@@ -25,6 +25,7 @@ kotlin {
 			kotlin.srcDir("$buildDir/generated/source/kaptKotlin/main")
 			dependencies {
 				implementation("com.soywiz.korlibs.klogger:klogger:$kloggerVersion")
+				implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
 			}
 		}
 
