@@ -96,4 +96,13 @@ Some failed experiments in trying to understand how to create "reactive" UI elem
 
 ## Bus Tests
 
-Learning the KorGE `Bus` mechanism, for sending signals between views and even between scenes?
+Learning the KorGE `Bus` mechanism, for sending signals between views. Don't use it to send signals between Scenes though. There are Sync and ASync buses available; Sync is simpler for me.
+
+## Layout Tests
+
+Creating a new container called `FlowContainer` which allows for automatic alignment of its children. Views can be centered or aligned to the left or right, horizontally or vertically.
+
+## UI Experiments
+
+Playing with the KorGE UI components, in particular how they are skinned. I am not convinced that these components are "fully baked", especially with skinning. For instance, you can apply a skin to `UIComboBox` - but when the combo box is open, its menu options are not skinned in the same way.
+
