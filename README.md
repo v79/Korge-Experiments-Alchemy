@@ -106,3 +106,6 @@ Creating a new container called `FlowContainer` which allows for automatic align
 
 Playing with the KorGE UI components, in particular how they are skinned. I am not convinced that these components are "fully baked", especially with skinning. For instance, you can apply a skin to `UIComboBox` - but when the combo box is open, its menu options are not skinned in the same way.
 
+## Pixel Shader Tests
+
+The new 2.0.0.999 ShaderFilter model seems to behave slightly differently from 2.7.0 and earlier. This test explores that, though so far I can't replicate the problem.
