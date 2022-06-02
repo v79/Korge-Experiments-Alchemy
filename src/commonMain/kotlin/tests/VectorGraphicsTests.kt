@@ -65,9 +65,9 @@ class VectorGraphicsTests : Scene() {
             }
 //            val cicleBmp = newSquare.renderToBitmap(views)
 
-            solidRect(300.0, 300.0) {
+            roundRect(300.0, 300.0, rx = 12.0, ry = 12.0, stroke = Colors.BLUE, strokeThickness = 4.0) {
                 xy(50.0, 50.0)
-                println("solidRect collides with its container?"  + collidesWith(this@container))
+                println("roundRect collides with its container?"  + collidesWith(this@container))
 
                 addChild(newSquare) // appears at the drawn coordinates
                 newSquare.addUpdater {

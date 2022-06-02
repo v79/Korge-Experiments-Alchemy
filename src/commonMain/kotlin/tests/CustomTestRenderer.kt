@@ -406,7 +406,7 @@ open class ColorText(
     override fun renderInternal(ctx: RenderContext) {
         _renderInternal(ctx)
         while (imagesToRemove.isNotEmpty()) {
-            ctx.agBitmapTextureManager.removeBitmap(imagesToRemove.removeLast())
+            ctx.agBitmapTextureManager.removeBitmap(imagesToRemove.removeLast(), "because reasons")
         }
         //val tva: TexturedVertexArray? = null
         if (tva != null) {

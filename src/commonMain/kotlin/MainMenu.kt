@@ -2,7 +2,6 @@ import com.soywiz.klock.seconds
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.scene.MaskTransition
 import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.service.process.NativeProcess
 import com.soywiz.korge.ui.UISkin
 import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.ui.uiVerticalFill
@@ -74,13 +73,16 @@ class MainMenu : Scene() {
 					uiButton(text = "UI Experiments") {
 						onClick { goToScene("uiTest") }
 					}
+					uiButton(text = "Pixel Shader Tests") {
+						onClick { goToScene("pixelShaderTest") }
+					}
 				}
 			}
 		}
 		uiButton(text = "Quit") {
 			xy(0.0, 0.0)
 			onClick {
-				NativeProcess(views).close(0)
+				views.gameWindow.close()
 			}
 		}
 	}
@@ -159,6 +161,11 @@ class MainMenu : Scene() {
 					time = 1.seconds
 				)
 			}
+			"pixelShaderTest" -> {
+				sceneContainer.changeTo<PixelShaderTest>(
+					transition = transition,
+					time = 1.seconds
+				)			}
 		}
 	}
 }

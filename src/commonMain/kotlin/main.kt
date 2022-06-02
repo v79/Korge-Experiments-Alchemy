@@ -37,6 +37,7 @@ object MyModule : Module() {
         mapPrototype { BusTest(get()) }
         mapPrototype { LayoutTest(get()) }
         mapPrototype { UIExperiments(get()) }
+        mapPrototype { PixelShaderTest() }
     }
 }
 

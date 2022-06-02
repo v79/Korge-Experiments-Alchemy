@@ -40,9 +40,11 @@ class Test1 : Scene() {
     val willOverflowText =
         "One way of animation in KorGE is to just make a loop and place a delay. This method allows you to define complex logic inside the loop and define state machines just by code. (Have in mind that this approach is likely to have some kind of stuttering.) One way of animation in KorGE is to just make a loop and place a delay. This method allows you to define complex logic inside the loop and define state machines just by code. (Have in mind that this approach is likely to have some kind of stuttering.) One way of animation in KorGE is to just make a loop and place a delay. This method allows you to define complex logic inside the loop and define state machines just by code. (Have in mind that this approach is likely to have some kind of stuttering.)"
 
-    val fontNamesToFile: Map<String, VfsFile> = SystemFont.listFontNamesWithFiles()
+    private val fontNamesToFile: MutableMap<String, VfsFile> = mutableMapOf()
 
     override suspend fun Container.sceneInit() {
+        val fnames = SystemFont.listFontNamesWithFiles()
+        fontNamesToFile.putAll(fnames)
     }
 
     override suspend fun Container.sceneMain() {
